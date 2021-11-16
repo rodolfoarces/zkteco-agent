@@ -22,22 +22,22 @@ namespace zkteco_cli.Components
 		private bool IsConnected = false;
 
 		// Loading ZKTeko Class device
-		private CZKEM zkteko = new CZKEM();
+		private CZKEM zkteco = new CZKEM();
 
 		public bool TestConnect(string ip, int port, int password)
 		{
 			Console.WriteLine("Opening connection for testing");
-			if (this.zkteko.SetCommPassword(password))
+			if (this.zkteco.SetCommPassword(password))
 			{
 				log.Info("Setting password");
 				this.IsConnected = true;
 			}
 
-			if (this.zkteko.Connect_Net(ip, port))
+			if (this.zkteco.Connect_Net(ip, port))
 			{
 				log.Info("Connection established");
 				this.IsConnected = true;
-				this.zkteko.Disconnect();
+				this.zkteco.Disconnect();
 			}
 			else
             {
@@ -52,7 +52,7 @@ namespace zkteco_cli.Components
 		{
 			if (this.IsConnected)
 			{
-				this.zkteko.Disconnect();
+				this.zkteco.Disconnect();
 				this.IsConnected = false;
 			}
 		}
@@ -61,12 +61,12 @@ namespace zkteco_cli.Components
 		{
 			log.Debug("Getting serial");
 			log.Debug("Setting password");
-			bool hasPassword = zkteko.SetCommPassword(this.Password);
+			bool hasPassword = zkteco.SetCommPassword(this.Password);
 
 			if (hasPassword)
             {
 				log.Debug("Opennig connection");
-				this.IsConnected = this.zkteko.Connect_Net(this.Host, this.Port);
+				this.IsConnected = this.zkteco.Connect_Net(this.Host, this.Port);
 			}
 			else
             {
@@ -77,7 +77,7 @@ namespace zkteco_cli.Components
 			if (this.IsConnected)
 			{
 				log.Debug("Connected");
-				bool hasSerial = this.zkteko.GetSerialNumber(0, out this.Serial);
+				bool hasSerial = this.zkteco.GetSerialNumber(0, out this.Serial);
 				if (hasSerial)
                 {
 					log.Debug("Serial obtained");
@@ -86,7 +86,7 @@ namespace zkteco_cli.Components
                 {
 					log.Error("Serial not obtained");
 				}
-				this.zkteko.Disconnect();
+				this.zkteco.Disconnect();
 			}
 			else
 			{
@@ -101,12 +101,12 @@ namespace zkteco_cli.Components
         {
 			log.Debug("Getting serial");
 			log.Debug("Setting password");
-			bool hasPassword = zkteko.SetCommPassword(this.Password);
+			bool hasPassword = zkteco.SetCommPassword(this.Password);
 
 			if (hasPassword)
 			{
 				log.Debug("Opennig connection");
-				this.IsConnected = this.zkteko.Connect_Net(this.Host, this.Port);
+				this.IsConnected = this.zkteco.Connect_Net(this.Host, this.Port);
 			}
 			else
 			{
@@ -118,7 +118,7 @@ namespace zkteco_cli.Components
 			{
 				log.Debug("Connected");
 				int dwMachineNumber = machineNumber; // Machine ID (in)
-				bool readLog = this.zkteko.ReadGeneralLogData(dwMachineNumber);
+				bool readLog = this.zkteco.ReadGeneralLogData(dwMachineNumber);
 
 				if (readLog)
 				{
@@ -138,7 +138,7 @@ namespace zkteco_cli.Components
 					int dwSecond = 0; // Pointer that points to the LONG variable. Its value is the seconds of an attendance record.
 					int dwWorkCode = 0; // Pointer that points to the LONG variable. Its value is the work code of an attendance record.
 
-					while (this.zkteko.SSR_GetGeneralLogData(dwMachineNumber, out dwEnrollNumber, out dwVerifyMode, out dwInOutMode, out dwYear, out dwMonth, out dwDay, out dwHour, out dwMinute, out dwSecond, ref dwWorkCode))
+					while (this.zkteco.SSR_GetGeneralLogData(dwMachineNumber, out dwEnrollNumber, out dwVerifyMode, out dwInOutMode, out dwYear, out dwMonth, out dwDay, out dwHour, out dwMinute, out dwSecond, ref dwWorkCode))
 					{ 
 						log.Debug("Machine ID: " + dwMachineNumber.ToString() + " , ");
 						log.Debug("User ID of an att: " + dwEnrollNumber.ToString() + " , ");
