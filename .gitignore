@@ -385,20 +385,20 @@ nupkg/
 *.sln.docstates
 
 # Build results
-agent-cli*/[Dd]ebug/
-agent-cli*/[Dd]ebugPublic/
-agent-cli*/[Rr]elease/
-agent-cli*/[Rr]eleases/
-agent-cli*/x64/
-agent-cli*/x86/
-agent-cli*/build/
-agent-cli*/bld/
-agent-cli*/[Bb]in/
-agent-cli*/[Oo]bj/
-agent-cli*/[Oo]ut/
-agent-cli*/sbuild.log
-agent-cli*/sbuild.err
-agent-cli*/sbuild.wrn
+zkteko-cli/[Dd]ebug/
+zkteko-cli/[Dd]ebugPublic/
+zkteko-cli/[Rr]elease/
+zkteko-cli/[Rr]eleases/
+zkteko-cli/x64/
+zkteko-cli/x86/
+zkteko-cli/build/
+zkteko-cli/bld/
+zkteko-cli/[Bb]in/
+zkteko-cli/[Oo]bj/
+zkteko-cli/[Oo]ut/
+zkteko-cli/sbuild.log
+zkteko-cli/sbuild.err
+zkteko-cli/sbuild.wrn
 
 # Visual Studio 2015
 .vs/

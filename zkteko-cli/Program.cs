@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using log4net;
 using CommandLine;
-using agent_cli.Components;
+using zkteko_cli.Components;
 
-namespace agent_cli
+namespace zkteko_cli
 {
 	class Program
 	{
@@ -53,8 +53,9 @@ namespace agent_cli
 			log.Info(device.ToString());
 
 			string serial = device.GetSerial();
-
 			log.Info(serial);
+
+			device.GetAttendance(1);
 
 		}
 		static void HandleParseError(IEnumerable<Error> errs)
