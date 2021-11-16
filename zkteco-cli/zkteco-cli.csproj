@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3A3C22A7-4404-4BC4-9276-BDFBE6AE0BFB}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>zkteko_cli</RootNamespace>
-    <AssemblyName>zkteko-cli</AssemblyName>
+    <RootNamespace>zkteco_cli</RootNamespace>
+    <AssemblyName>zkteco-cli</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

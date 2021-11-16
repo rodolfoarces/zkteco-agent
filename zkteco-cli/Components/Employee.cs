@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace zkteko_cli.Components
+namespace zkteco_cli.Components
 {
     class Employee
     {

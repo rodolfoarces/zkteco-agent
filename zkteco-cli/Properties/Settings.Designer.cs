@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace zkteko_cli.Properties {
+namespace zkteco_cli.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

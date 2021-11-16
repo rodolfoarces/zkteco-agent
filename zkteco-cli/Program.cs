@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using log4net;
 using CommandLine;
-using zkteko_cli.Components;
+using zkteco_cli.Components;
 
-namespace zkteko_cli
+namespace zkteco_cli
 {
 	class Program
 	{

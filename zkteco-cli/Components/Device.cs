@@ -6,7 +6,7 @@ using log4net;
 using zkemkeeper;
 
 
-namespace zkteko_cli.Components
+namespace zkteco_cli.Components
 {
 	class Device
 	{
