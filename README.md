@@ -1,6 +1,6 @@
 # Agent
 
-Device conection agent for biometric terminal
+Biometric device terminal connection agent
 
 ## Getting started
 
@@ -16,12 +16,12 @@ Packaged (Nuget): [Commandline](https://github.com/commandlineparser/commandline
 The executable is used with connection parameters or default parameters will be set:
 
 ```
-agent-cli.exe [-h|--host FQDN_or_IP] [-p|--port port_number] [-P|--password device_password]
+zkteco-cli.exe [-h|--host FQDN_or_IP] [-p|--port port_number] [-P|--password device_password]
 ```
 
 ## Diagnostics
 
-In the executable folder a file "agent-cli.log" is created with debug information.
+In the executable folder a file "zkteco-cli.log" is created with debug information.
 
 ## Licenses
 
