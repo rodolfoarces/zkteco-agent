@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 
 namespace zkteco_cli.Components
 {
     internal class AttendanceEmployee
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AttendanceEmployee));
 
-        String EnrollNumber = null;
-        String Name = null;
+        string EnrollNumber = null;
+        string Name = null;
 
-        public AttendanceEmployee(string number, string name)
+        public AttendanceEmployee(string enrollnumber)
         {
-            this.SetEnrollNumber(number);
+            this.SetEnrollNumber(enrollnumber);
+        }
+
+        public AttendanceEmployee(string enrollnumber, string name)
+        {
+            this.SetEnrollNumber(enrollnumber);
             this.SetName(name);
         }
 

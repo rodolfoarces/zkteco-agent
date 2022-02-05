@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 
 namespace zkteco_cli.Components
 {
     internal class AttendanceDevice
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AttendanceDevice)); 
+
         int DeviceId = 0;
         string DeviceSerial = null;
         string DeviceIP = null;
