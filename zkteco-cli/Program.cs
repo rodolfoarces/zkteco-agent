@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using log4net;
 using CommandLine;
 using zkteco_cli.Components;
