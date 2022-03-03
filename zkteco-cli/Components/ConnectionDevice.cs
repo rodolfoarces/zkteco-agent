@@ -48,11 +48,11 @@ namespace zkteco_cli.Components
 
         public override string ToString()
         {
-			string obj = "ConnectionDevice";
-			obj = obj + "id: " + this.id.ToString();
-			obj = obj + "ip: " + this.ip;
-			obj = obj + "port: " + this.port.ToString();
-			obj = obj + "password: " + this.password.ToString();
+			string obj = " ConnectionDevice";
+			obj = obj + " id: " + this.id.ToString();
+			obj = obj + " ip: " + this.ip;
+			obj = obj + " port: " + this.port.ToString();
+			obj = obj + " password: " + this.password.ToString();
 
 			return obj;
 		}

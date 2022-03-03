@@ -60,56 +60,25 @@ namespace zkteco_cli
 
 						foreach (ConnectionDevice dev in devices)
 						{
+							ProgramLoggger.Debug("Adding devices to connect");
 							zkdevices.Add(new ZKTekoDevice(dev));
                         }
 
 						foreach (ZKTekoDevice zdev in zkdevices)
                         {
-							zdev.ObtainSerial();
-                        }
-					}
+							ProgramLoggger.Debug("Connecting to device");
+							zdev.ObtainAttendance();
+							
+
+						}
+
+						ProgramLoggger.Debug(JSON.Serialize(zkdevices));				}
 				}
 				else
 				{
 					ProgramLoggger.Error("The file path given doesn't exists or you don't have permissions to access it");
 				}
 			}
-			
-			/* Device device = new Device();
-			device.Id = 1;
-			device.Name = "Test";
-			device.UID = "aa11";
-			device.MAC = "00:17:61:12:C0:F0";
-
-			ProgramLoggger.Debug("Setting IP");
-			if (opts.Host != "192.168.1.201")
-			{
-				ProgramLoggger.Debug("Host set to: " + opts.Host);
-				device.Host = opts.Host;
-			}
-
-			ProgramLoggger.Debug("Setting port");
-			if (opts.Port != 4370)
-			{
-				ProgramLoggger.Debug("Port set to: " + opts.Port.ToString());
-				device.Port = opts.Port;
-			}
-
-			ProgramLoggger.Debug("Setting password");
-			if (opts.Port != 0)
-			{
-				ProgramLoggger.Debug("Password set to: " + opts.Password.ToString());
-				device.Password = opts.Password;
-			}
-			
-
-			ProgramLoggger.Info(device.ToString());
-
-			string serial = device.GetSerial();
-			ProgramLoggger.Info(serial);
-
-			device.GetAttendance(1);
-			*/
 
 		}
 		static void HandleParseError(IEnumerable<Error> errs)

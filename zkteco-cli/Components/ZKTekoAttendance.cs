@@ -9,7 +9,8 @@ namespace zkteco_cli.Components
 {
     internal class ZKTekoAttendance
     {
-		
+		public string serial { get; set; }
+
 		AttendanceEmployee employee { get; set; }
 
 		/*	The VerifyMode parameter specifies the verification mode. The values are described 
@@ -45,8 +46,9 @@ namespace zkteco_cli.Components
 		 */
 		public int WorkCode { get; set; }
 
-		public ZKTekoAttendance(string enrollnumber, int verifymode, int inoutmode, int year, int month, int day, int hour, int minute, int second, int workcode)
+		public ZKTekoAttendance(string serial, string enrollnumber, int verifymode, int inoutmode, int year, int month, int day, int hour, int minute, int second, int workcode)
 		{
+			this.serial = serial;
 			this.employee = new AttendanceEmployee(enrollnumber);
 			this.VerifyMode = verifymode;
 			this.InOutMode = inoutmode;
@@ -60,5 +62,24 @@ namespace zkteco_cli.Components
 
 		}
 
-	}
+        public override string ToString()
+        {
+			string obj;
+
+			obj = "Serial: " + serial.ToString() + ", ";
+			obj += "Employee ID: " + employee.ToString() + ", ";
+			obj += "VerifyMode: " + VerifyMode.ToString() + ", ";
+			obj += "InOutMode: " + InOutMode.ToString() + ", ";
+			obj += "Year: " + Year.ToString() + ", ";
+			obj += "Month: " + Month.ToString() + ", ";
+			obj	+= "Day: " + Day.ToString() + ", ";
+			obj += "Hour: " + Hour.ToString() + ", ";
+			obj += "Minute: " + Minute.ToString() + ", ";
+			obj += "Second: " + Second.ToString() + ", ";
+			obj += "WorkCode: " + WorkCode.ToString();
+
+			return obj;
+        }
+
+    }
 }

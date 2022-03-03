@@ -52,5 +52,10 @@ namespace zkteco_cli.Components
                 return this.Name; 
             }
         }
+
+        public override string ToString()
+        {
+            return this.EnrollNumber.ToString();
+        }
     }
 }
