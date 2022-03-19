@@ -55,24 +55,25 @@ namespace zkteco_cli
 						}
 						
 						
-						List<ZKTekoDevice> zkdevices = new List<ZKTekoDevice>();
+						List<ZKTecoDevice> zkdevices = new List<ZKTecoDevice>();
 
 
 						foreach (ConnectionDevice dev in devices)
 						{
 							ProgramLoggger.Debug("Adding devices to connect");
-							zkdevices.Add(new ZKTekoDevice(dev));
+							zkdevices.Add(new ZKTecoDevice(dev));
                         }
 
-						foreach (ZKTekoDevice zdev in zkdevices)
+						foreach (ZKTecoDevice zdev in zkdevices)
                         {
 							ProgramLoggger.Debug("Connecting to device");
 							zdev.ObtainAttendance();
+							zdev.ObtainUsers();
 							
 
 						}
 
-						ProgramLoggger.Debug(JSON.Serialize(zkdevices));				}
+						ProgramLoggger.Info(JSON.Serialize(zkdevices));				}
 				}
 				else
 				{

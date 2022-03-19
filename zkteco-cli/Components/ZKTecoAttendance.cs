@@ -7,11 +7,11 @@ using log4net;
 
 namespace zkteco_cli.Components
 {
-    internal class ZKTekoAttendance
+    internal class ZKTecoAttendance
     {
-		public string serial { get; set; }
+		public string Serial { get; set; }
 
-		AttendanceEmployee employee { get; set; }
+		public string UserId { get; set; }
 
 		/*	The VerifyMode parameter specifies the verification mode. The values are described 
 		 *	as follows: under normal conditions: 
@@ -46,10 +46,10 @@ namespace zkteco_cli.Components
 		 */
 		public int WorkCode { get; set; }
 
-		public ZKTekoAttendance(string serial, string enrollnumber, int verifymode, int inoutmode, int year, int month, int day, int hour, int minute, int second, int workcode)
+		public ZKTecoAttendance(string serial, string enrollnumber, int verifymode, int inoutmode, int year, int month, int day, int hour, int minute, int second, int workcode)
 		{
-			this.serial = serial;
-			this.employee = new AttendanceEmployee(enrollnumber);
+			this.Serial = serial;
+			this.UserId = enrollnumber;
 			this.VerifyMode = verifymode;
 			this.InOutMode = inoutmode;
 			this.Year = year;
@@ -66,16 +66,16 @@ namespace zkteco_cli.Components
         {
 			string obj;
 
-			obj = "Serial: " + serial.ToString() + ", ";
-			obj += "Employee ID: " + employee.ToString() + ", ";
-			obj += "VerifyMode: " + VerifyMode.ToString() + ", ";
-			obj += "InOutMode: " + InOutMode.ToString() + ", ";
-			obj += "Year: " + Year.ToString() + ", ";
-			obj += "Month: " + Month.ToString() + ", ";
-			obj	+= "Day: " + Day.ToString() + ", ";
-			obj += "Hour: " + Hour.ToString() + ", ";
-			obj += "Minute: " + Minute.ToString() + ", ";
-			obj += "Second: " + Second.ToString() + ", ";
+			obj = "Serial: " + Serial.ToString() + " ";
+			obj += "User ID: " + UserId.ToString() + " ";
+			obj += "VerifyMode: " + VerifyMode.ToString() + " ";
+			obj += "InOutMode: " + InOutMode.ToString() + " ";
+			obj += "Year: " + Year.ToString() + " ";
+			obj += "Month: " + Month.ToString() + " ";
+			obj	+= "Day: " + Day.ToString() + " ";
+			obj += "Hour: " + Hour.ToString() + " ";
+			obj += "Minute: " + Minute.ToString() + " ";
+			obj += "Second: " + Second.ToString() + " ";
 			obj += "WorkCode: " + WorkCode.ToString();
 
 			return obj;

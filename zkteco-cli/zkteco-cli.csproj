@@ -89,14 +89,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\ZKTekoAttendance.cs" />
-    <Compile Include="Components\AttendanceDevice.cs" />
-    <Compile Include="Components\AttendanceEmployee.cs" />
     <Compile Include="Components\ConnectionDevice.cs" />
-    <Compile Include="Components\FingerPrintRecord.cs" />
-    <Compile Include="Components\Employee.cs" />
-    <Compile Include="Components\Device.cs" />
-    <Compile Include="Components\ZKTekoDevice.cs" />
+    <Compile Include="Components\ZKTecoAttendance.cs" />
+    <Compile Include="Components\ZKTecoDevice.cs" />
+    <Compile Include="Components\ZKTecoUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
