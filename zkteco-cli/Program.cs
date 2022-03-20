@@ -16,7 +16,8 @@ namespace zkteco_cli
 		[Option('P', "port", Required = false, HelpText = "Connection port (Default:4370)", Default = 4370)] public int Port { get; set; }
 		[Option('p', "password", Required = false, HelpText = "Connection password (Default:0)", Default = 0)] public int Password { get; set; }
 		[Option('h', "host", Required = false, HelpText = "Connection IP (Default:192.168.1.201)", Default = "192.168.1.201")] public string Host { get; set; }
-		[Option('f', "file", Required = false, HelpText = "Device list (JSON format)", Default = null)] public string JOSNFile { get; set; }
+		[Option('f', "file", Required = false, HelpText = "Device list (JSON format)", Default = null)] public string JSONDevicesFile { get; set; }
+		[Option('e', "endpoint", Required = false, HelpText = "Endpoint list (JSON format)", Default = null)] public string JSONEndpointsFile { get; set; }
 		[Option('t', "sleep-time", Required = false, HelpText = "Sleep time between device connection (in minutes)", Default = 1)] public int SleepTime { get; set; }
 
 		/* Set the logger */
@@ -32,7 +33,7 @@ namespace zkteco_cli
 
 		static void RunOptions(Program opts)
         {
-			if (string.IsNullOrEmpty(opts.JOSNFile))
+			if (string.IsNullOrEmpty(opts.JSONDevicesFile))
             {
 				/* No JSON file was given, trying with the rest of the parsed information */
 				ProgramLoggger.Info("No JSON file was given, trying with the rest of the parsed information");
@@ -42,9 +43,9 @@ namespace zkteco_cli
 			else
             {
 				ProgramLoggger.Debug("Reading file provided");
-				if (File.Exists(opts.JOSNFile))
+				if (File.Exists(opts.JSONDevicesFile))
 				{
-					using (StreamReader r = new StreamReader(opts.JOSNFile))
+					using (StreamReader r = new StreamReader(opts.JSONDevicesFile))
 					{
 						string json = r.ReadToEnd();
 						ProgramLoggger.Debug("Deserializing JSON file");
@@ -77,7 +78,36 @@ namespace zkteco_cli
 				}
 				else
 				{
-					ProgramLoggger.Error("The file path given doesn't exists or you don't have permissions to access it");
+					ProgramLoggger.Error("The file path given for devices doesn't exists or you don't have permissions to access it");
+				}
+				// Endpoints to send information
+				if (string.IsNullOrEmpty(opts.JSONEndpointsFile))
+				{
+					/* No JSON file was given, trying with the rest of the parsed information */
+					ProgramLoggger.Info("No JSON file was given, trying with the rest of the parsed information");
+
+				}
+				else
+				{
+					ProgramLoggger.Debug("Reading file provided");
+					if (File.Exists(opts.JSONEndpointsFile))
+					{
+						using (StreamReader e = new StreamReader(opts.JSONEndpointsFile))
+						{
+							string ep_json = e.ReadToEnd();
+							ProgramLoggger.Debug("Deserializing JSON Endpoints file");
+							List<ConnectionEndpoint> endpoints = JSON.Deserialize<List<ConnectionEndpoint>>(ep_json);
+							foreach (ConnectionEndpoint  endpoint in endpoints)
+							{
+								ProgramLoggger.Debug(endpoint.ToString());
+							}
+						}
+					}
+					else
+                    {
+						ProgramLoggger.Error("The file path given for endpoints doesn't exists or you don't have permissions to access it");
+					}
+					
 				}
 			}
 
