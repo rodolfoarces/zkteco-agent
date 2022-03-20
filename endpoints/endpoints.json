@@ -1,6 +1,6 @@
 [
   {
-    "Url": "https://endpoint:443/api/endpoint",
-    "Token":  "aa123"
+    "url": "https://endpoint:443/api/endpoint",
+    "token": "aa123"
   }
 ]

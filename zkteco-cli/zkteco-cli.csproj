@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\ConnectionDevice.cs" />
+    <Compile Include="Components\ConnectionEndpoint.cs" />
     <Compile Include="Components\ZKTecoAttendance.cs" />
     <Compile Include="Components\ZKTecoDevice.cs" />
     <Compile Include="Components\ZKTecoUser.cs" />
