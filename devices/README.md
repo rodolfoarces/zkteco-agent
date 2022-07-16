@@ -4,7 +4,7 @@
 
 [Homepage](https://www.zkteco.com/en/)
 
-The ZKTeco devices use a SDK, in this POC was used **SDK-Ver6.3.1.37** available from [this link](https://www.zkteco.com/en/download_catgory/45.html)
+The ZKTeco devices use a SDK, in this POC was used **SDK-Ver6.3.1.34** available from [this link](https://desarrollo.zktecolatinoamerica.com/downloads) <sup>(Registration required)</sup>.
 
 # Installation
 
