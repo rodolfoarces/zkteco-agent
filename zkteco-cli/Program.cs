@@ -35,7 +35,7 @@ namespace zkteco_cli
 			CommandLine.Parser.Default.ParseArguments<Program>(args).WithParsed(RunOptions).WithNotParsed(HandleParseError);
 		}
 
-		static void RunOptions(Program opts)
+		static async void RunOptions(Program opts)
         {
 			if (string.IsNullOrEmpty(opts.JSONDevicesFile))
 			{
@@ -54,7 +54,9 @@ namespace zkteco_cli
 
 						string json = r.ReadToEnd();
 						if (ProgramLoggger.IsDebugEnabled)
+                        {
 							ProgramLoggger.Debug("Deserializing JSON file");
+						}
 
 						/* Obtain list of devices to connect */
 						List<ConnectionDevice> devices = JSON.Deserialize<List<ConnectionDevice>>(json);
@@ -71,21 +73,27 @@ namespace zkteco_cli
 						/* Create list of devices with which we'll work */
 						List<ZKTecoDevice> zkdevices = new List<ZKTecoDevice>();
 
-
 						foreach (ConnectionDevice dev in devices)
 						{
 							if (ProgramLoggger.IsDebugEnabled)
+                            {
 								ProgramLoggger.Debug("Adding device to list of devices to connect to");
+							}
 							zkdevices.Add(new ZKTecoDevice(dev));
 						}
 
 						foreach (ZKTecoDevice zdev in zkdevices)
 						{
 							if (ProgramLoggger.IsDebugEnabled)
+                            {
 								ProgramLoggger.Debug("Connecting to device" + zdev.ToString());
-
+							}
+								
 							if (ProgramLoggger.IsDebugEnabled)
+                            {
 								ProgramLoggger.Debug("Obtaning attendance");
+							}
+								
 							zdev.ObtainAttendance();
 
 							if (ProgramLoggger.IsDebugEnabled)
@@ -98,49 +106,56 @@ namespace zkteco_cli
 						// JSON.Serialize(zkdevices)
 
 						ProgramLoggger.Info(JSON.Serialize(zkdevices));
+						// Endpoints to send information
+						if (string.IsNullOrEmpty(opts.JSONEndpointsFile))
+						{
+							/* No JSON file was given, trying with the rest of the parsed information */
+							ProgramLoggger.Info("No JSON file was given, trying with the rest of the parsed information");
+							Environment.Exit(1);
+
+						}
+						else
+						{
+							ProgramLoggger.Debug("Reading file provided");
+							if (File.Exists(opts.JSONEndpointsFile))
+							{
+								using (StreamReader e = new StreamReader(opts.JSONEndpointsFile))
+								{
+									string ep_json = e.ReadToEnd();
+									ProgramLoggger.Debug("Deserializing JSON Endpoints file");
+									List<ConnectionEndpoint> endpoints = JSON.Deserialize<List<ConnectionEndpoint>>(ep_json);
+									
+									// Calls connection to endpoints to send data
+									await SendDataToEndpoints(endpoints, zkdevices);
+									
+									if (ProgramLoggger.IsDebugEnabled)
+									{
+										/* Show all information of endpoints */
+										foreach (ConnectionEndpoint endpoint in endpoints)
+										{
+											ProgramLoggger.Debug(endpoint.ToString());
+										}
+									}
+								}
+							}
+							else
+							{
+								ProgramLoggger.Error("The file path given for endpoints doesn't exists or you don't have permissions to access it");
+								Environment.Exit(1);
+							}
+
+						}
+
+						
 					}
+					
 				}
 				else
 				{
 					ProgramLoggger.Error("The file path given for devices doesn't exists or you don't have permissions to access it");
 					Environment.Exit(1);
 				}
-			}
-			// Endpoints to send information
-			if (string.IsNullOrEmpty(opts.JSONEndpointsFile))
-			{
-				/* No JSON file was given, trying with the rest of the parsed information */
-				ProgramLoggger.Info("No JSON file was given, trying with the rest of the parsed information");
-				Environment.Exit(1);
-
-			}
-			else
-			{
-				ProgramLoggger.Debug("Reading file provided");
-				if (File.Exists(opts.JSONEndpointsFile))
-				{
-					using (StreamReader e = new StreamReader(opts.JSONEndpointsFile))
-					{
-						string ep_json = e.ReadToEnd();
-						ProgramLoggger.Debug("Deserializing JSON Endpoints file");
-						List<ConnectionEndpoint> endpoints = JSON.Deserialize<List<ConnectionEndpoint>>(ep_json);
-						if (ProgramLoggger.IsDebugEnabled)
-						{
-							/* Show all information of endpoints */
-							foreach (ConnectionEndpoint endpoint in endpoints)
-							{
-								ProgramLoggger.Debug(endpoint.ToString());
-							}
-						}
-					}
 				}
-				else
-                {
-					ProgramLoggger.Error("The file path given for endpoints doesn't exists or you don't have permissions to access it");
-					Environment.Exit(1);
-				}
-					
-			}
 		}
 		static void HandleParseError(IEnumerable<Error> errs)
 		{
@@ -150,7 +165,7 @@ namespace zkteco_cli
 				ProgramLoggger.Error(error.ToString());
             }
 		}
-		static async Task GetToken(List<ConnectionEndpoint> endpoints,List<ZKTecoDevice> devices)
+		static async Task SendDataToEndpoints(List<ConnectionEndpoint> endpoints,List<ZKTecoDevice> devices)
         {
 			List<ApiEndpoint> api_endpoints = new List<ApiEndpoint>();
 
