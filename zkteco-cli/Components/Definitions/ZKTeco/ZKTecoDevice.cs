@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using zkemkeeper;
+using zkteco_cli.Connections;
 
 
-namespace zkteco_cli.Components
+namespace zkteco_cli.ZKTeco
 {
 	internal class ZKTecoDevice
 	{
