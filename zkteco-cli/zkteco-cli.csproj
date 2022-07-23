@@ -125,9 +125,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\Definitions\APIData\ApiData.cs" />
-    <Compile Include="Components\Definitions\APIData\ApiEndpoint.cs" />
-    <Compile Include="Components\Definitions\APIData\ApiResponse.cs" />
+    <Compile Include="Components\Definitions\API\ApiData.cs" />
+    <Compile Include="Components\Definitions\API\ApiEndpoint.cs" />
+    <Compile Include="Components\Definitions\API\ApiResponse.cs" />
     <Compile Include="Components\Definitions\Connections\ConnectionDevice.cs" />
     <Compile Include="Components\Definitions\Connections\ConnectionEndpoint.cs" />
     <Compile Include="Components\Definitions\ZKTeco\ZKTecoAttendance.cs" />

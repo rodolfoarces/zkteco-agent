@@ -7,7 +7,7 @@ using System.Threading;
 using log4net;
 using CommandLine;
 using Jil;
-using zkteco_cli.APIData;
+using zkteco_cli.API;
 using zkteco_cli.Connections;
 using zkteco_cli.ZKTeco;
 using System.Net;
