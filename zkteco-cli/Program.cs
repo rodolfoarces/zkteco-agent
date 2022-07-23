@@ -97,7 +97,10 @@ namespace zkteco_cli
 							zdev.ObtainAttendance();
 
 							if (ProgramLoggger.IsDebugEnabled)
+                            {
 								ProgramLoggger.Debug("Obtaning users");
+							}
+								
 							zdev.ObtainUsers();
 
 						}
@@ -105,6 +108,7 @@ namespace zkteco_cli
 						// Information to send to endpoints
 						// JSON.Serialize(zkdevices)
 
+						// Print information to send
 						ProgramLoggger.Info(JSON.Serialize(zkdevices));
 						// Endpoints to send information
 						if (string.IsNullOrEmpty(opts.JSONEndpointsFile))
@@ -125,9 +129,6 @@ namespace zkteco_cli
 									ProgramLoggger.Debug("Deserializing JSON Endpoints file");
 									List<ConnectionEndpoint> endpoints = JSON.Deserialize<List<ConnectionEndpoint>>(ep_json);
 									
-									// Calls connection to endpoints to send data
-									await SendDataToEndpoints(endpoints, zkdevices);
-									
 									if (ProgramLoggger.IsDebugEnabled)
 									{
 										/* Show all information of endpoints */
@@ -136,6 +137,10 @@ namespace zkteco_cli
 											ProgramLoggger.Debug(endpoint.ToString());
 										}
 									}
+
+									// Calls connection to endpoints to send data
+									await SendDataToEndpoints(endpoints, zkdevices);
+
 								}
 							}
 							else
@@ -145,7 +150,6 @@ namespace zkteco_cli
 							}
 
 						}
-
 						
 					}
 					
@@ -155,7 +159,7 @@ namespace zkteco_cli
 					ProgramLoggger.Error("The file path given for devices doesn't exists or you don't have permissions to access it");
 					Environment.Exit(1);
 				}
-				}
+			}
 		}
 		static void HandleParseError(IEnumerable<Error> errs)
 		{
