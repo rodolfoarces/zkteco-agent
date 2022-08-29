@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading;
 using log4net;
 using CommandLine;
-using Jil;
+using System.Text.Json;
 using zkteco_cli.API;
 using zkteco_cli.Connections;
 using zkteco_cli.ZKTeco;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Net;
+using System.Runtime.InteropServices;
 
 namespace zkteco_cli
 {
@@ -53,21 +51,15 @@ namespace zkteco_cli
 					{
 
 						string json = r.ReadToEnd();
-						if (ProgramLoggger.IsDebugEnabled)
-                        {
-							ProgramLoggger.Debug("Deserializing JSON file");
-						}
+                        ProgramLoggger.Debug("Deserializing JSON file" + json);
 
-						/* Obtain list of devices to connect */
-						List<ConnectionDevice> devices = JSON.Deserialize<List<ConnectionDevice>>(json);
+                        /* Obtain list of devices to connect */
+                        List<ConnectionDevice> devices = JsonSerializer.Deserialize< List<ConnectionDevice>>(json);
 
-						if (ProgramLoggger.IsDebugEnabled)
+						/* Show all information of devices */
+						foreach (ConnectionDevice device in devices)
 						{
-							/* Show all information of devices */
-							foreach (ConnectionDevice device in devices)
-							{
-								ProgramLoggger.Debug(device.ToString());
-							}
+							ProgramLoggger.Debug(device.ToString());
 						}
 
 						/* Create list of devices with which we'll work */
@@ -75,43 +67,27 @@ namespace zkteco_cli
 
 						foreach (ConnectionDevice dev in devices)
 						{
-							if (ProgramLoggger.IsDebugEnabled)
-                            {
-								ProgramLoggger.Debug("Adding device to list of devices to connect to");
-							}
+							ProgramLoggger.Debug("Adding device to list of devices to connect to");
 							zkdevices.Add(new ZKTecoDevice(dev));
 						}
 
 						foreach (ZKTecoDevice zdev in zkdevices)
 						{
-							if (ProgramLoggger.IsDebugEnabled)
-                            {
-								ProgramLoggger.Debug("Connecting to device" + zdev.ToString());
-							}
-								
-							if (ProgramLoggger.IsDebugEnabled)
-                            {
-								ProgramLoggger.Debug("Obtaning attendance");
-							}
-								
-							zdev.ObtainAttendance();
 
-							if (ProgramLoggger.IsDebugEnabled)
-                            {
-								ProgramLoggger.Debug("Obtaning users");
-							}
-								
-							zdev.ObtainUsers();
+							ProgramLoggger.Debug("Connecting to device" + zdev.ToString());
+                            
+							ProgramLoggger.Debug("Obtaning attendance");
+                            //zdev.ObtainAttendance();
+                            
+							ProgramLoggger.Debug("Obtaning users");
+                            //zdev.ObtainUsers();
 
 						}
 
-						// Information to send to endpoints
-						// JSON.Serialize(zkdevices)
-
-						// Print information to send
-						ProgramLoggger.Info(JSON.Serialize(zkdevices));
-						// Endpoints to send information
-						if (string.IsNullOrEmpty(opts.JSONEndpointsFile))
+                        // Print information to send
+                        ProgramLoggger.Info(JsonSerializer.Serialize(zkdevices));
+                        // Endpoints to send information
+                        if (string.IsNullOrEmpty(opts.JSONEndpointsFile))
 						{
 							/* No JSON file was given, trying with the rest of the parsed information */
 							ProgramLoggger.Info("No JSON file was given, trying with the rest of the parsed information");
@@ -120,27 +96,28 @@ namespace zkteco_cli
 						}
 						else
 						{
-							ProgramLoggger.Debug("Reading file provided");
+							ProgramLoggger.Debug("Reading file provided" + opts.JSONEndpointsFile);
 							if (File.Exists(opts.JSONEndpointsFile))
 							{
 								using (StreamReader e = new StreamReader(opts.JSONEndpointsFile))
 								{
 									string ep_json = e.ReadToEnd();
-									ProgramLoggger.Debug("Deserializing JSON Endpoints file");
-									List<ConnectionEndpoint> endpoints = JSON.Deserialize<List<ConnectionEndpoint>>(ep_json);
-									
-									if (ProgramLoggger.IsDebugEnabled)
+									ProgramLoggger.Debug("Deserializing JSON Endpoints file: " + ep_json);
+									try
 									{
+                                        ApiEndpoint endpoint = JsonSerializer.Deserialize<ApiEndpoint>(ep_json);
 										/* Show all information of endpoints */
-										foreach (ConnectionEndpoint endpoint in endpoints)
-										{
+										//foreach (ApiEndpoint endpoint in endpoints)
+										//{
 											ProgramLoggger.Debug(endpoint.ToString());
-										}
+										//}
+										await SendDataToEndpoints(endpoint, zkdevices);
+                                        
+                                    }
+									catch (Exception ex)
+									{
+										ProgramLoggger.Error(ex.ToString());
 									}
-
-									// Calls connection to endpoints to send data
-									await SendDataToEndpoints(endpoints, zkdevices);
-
 								}
 							}
 							else
@@ -169,101 +146,118 @@ namespace zkteco_cli
 				ProgramLoggger.Error(error.ToString());
             }
 		}
-		static async Task SendDataToEndpoints(List<ConnectionEndpoint> endpoints,List<ZKTecoDevice> devices)
+		static async Task SendDataToEndpoints(ApiEndpoint endpoint,List<ZKTecoDevice> devices)
         {
-			List<ApiEndpoint> api_endpoints = new List<ApiEndpoint>();
-
-			foreach (ConnectionEndpoint endpoint in endpoints)
-            {
-				api_endpoints.Add(new ApiEndpoint(endpoint));
-            }
-
-			foreach (ApiEndpoint endpoint in api_endpoints)
+			/* Initial connection to authenticate and obtain token */
+			/* Set the HTTP client connection */
+			using (HttpClient client = new HttpClient())
 			{
-				/* Initial connection to authenticate and obtain token */
-				/* Set the HTTP client connection */
-				using (HttpClient client = new HttpClient())
+				ProgramLoggger.Debug("Trying connections");
+				/* Initiate connection and obtain token */
+				try
 				{
-
-					try
+                    
+					// Assamble the initial connection
+					ProgramLoggger.Debug("Assembling connection");
+					client.DefaultRequestHeaders.Accept.Clear();
+					client.DefaultRequestHeaders.Accept.Add(
+						new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+					client.DefaultRequestHeaders.Add("User-Agent", "api-client");
+					var formContent = new FormUrlEncodedContent(new[]
 					{
-						/* Assamble the initial connection */
-						client.DefaultRequestHeaders.Accept.Clear();
-						client.DefaultRequestHeaders.Accept.Add(
-							new MediaTypeWithQualityHeaderValue("multipart/form-data"));
-						client.DefaultRequestHeaders.Add("User-Agent", "api-client");
-						var formContent = new FormUrlEncodedContent(new[]
-						{
-						new KeyValuePair<string, string>("username", endpoint.GetUsername()),
-						new KeyValuePair<string, string>("password", endpoint.GetPassword()),
-						new KeyValuePair<string, string>("application", endpoint.GetApplication()),
-						});
+					new KeyValuePair<string, string>("username", endpoint.GetUsername().ToString()),
+					new KeyValuePair<string, string>("password", endpoint.GetPassword()),
+					new KeyValuePair<string, string>("application", endpoint.GetApplication()),
+					});
 
-						/* Making the connection and sending data*/
-						var stringTask = client.PostAsync(endpoint.GetLoginURL(), formContent);
+					// Making the connection and sending data
+					ProgramLoggger.Debug("Sending information");
+					var stringTask = client.PostAsync(endpoint.GetLoginURL(), formContent);
 
-						/* Get response data */
-						var response = await stringTask;
-						var stringContent = await response.Content.ReadAsStringAsync();
-						if (ProgramLoggger.IsDebugEnabled)
-						{
-							ProgramLoggger.Debug(response.ToString());
-							ProgramLoggger.Debug(stringContent);
-						}
+					// Get response data
+					ProgramLoggger.Debug("Processing response");
+					var response = await stringTask;
+					var stringContent = await response.Content.ReadAsStringAsync();
 
-						/* Convert response content to usable information */
-						endpoint.SetApiResponse(JSON.Deserialize<ApiResponse>(stringContent));
-					}
-					catch (System.Net.Http.HttpRequestException ex)
-					{
-						ProgramLoggger.Error(ex.Message);
-					}
-					finally
-					{
-						client.Dispose();
-					}
+					ProgramLoggger.Debug(response.ToString());
+					ProgramLoggger.Debug(stringContent);
+
+					// Convert response content to usable information
+					//Apiresponse api_response = JsonSerializer.Deserialize<ApiResponse>(stringContent);
+					//ProgramLoggger.Debug(api_response.ToString());
+					/*
+                    var url = endpoint.GetLoginURL();
+
+                    var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                    httpRequest.Method = "POST";
+
+                    httpRequest.ContentType = "application/x-www-form-urlencoded";
+
+                    var data = "username=" + endpoint.GetUsername().ToString() + "&password=" + endpoint.GetPassword() + "&app=" + endpoint.GetApplication();
+
+                    using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                    {
+                        streamWriter.Write(data);
+                    }
+
+                    var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+					ProgramLoggger.Debug(httpResponse.ToString());
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        string result = streamReader.ReadToEnd();
+                        ProgramLoggger.Debug(result);
+                    }
+					*/
+
+
+                }
+                catch (System.Net.Http.HttpRequestException ex)
+				{
+					ProgramLoggger.Error(ex.Message);
 				}
-				/* Send information */
-				using (HttpClient client = new HttpClient())
+				finally
 				{
-
-					try
-					{
-						/* Assamble the initial connection */
-						client.DefaultRequestHeaders.Accept.Clear();
-						client.DefaultRequestHeaders.Accept.Add(
-							new MediaTypeWithQualityHeaderValue("application/json"));
-						client.DefaultRequestHeaders.Add("User-Agent", "api-client");
-						client.DefaultRequestHeaders.Add("Authorization", "Bearer " + endpoint.GetApiResponse().GetData().GetAccessToken());
-						client.DefaultRequestHeaders.Add("Cookie", "refreshToken=" + endpoint.GetApiResponse().GetData().GetRefreshToken());
-
-						var httpContent = new StringContent(JSON.Serialize(devices), Encoding.UTF8, "application/json");
-
-						var stringTask = client.PostAsync(endpoint.GetUploadURL(), httpContent);
-
-						/* Get response data */
-						var response = await stringTask;
-						var stringContent = await response.Content.ReadAsStringAsync();
-						if (ProgramLoggger.IsDebugEnabled)
-						{
-							ProgramLoggger.Debug(response.ToString());
-							ProgramLoggger.Debug(stringContent);
-						}
-
-						/* Convert response content to usable information */
-						endpoint.SetApiResponse(JSON.Deserialize<ApiResponse>(stringContent));
-
-					}
-					catch (System.Net.Http.HttpRequestException ex)
-					{
-						ProgramLoggger.Error(ex.Message);
-					}
-					finally
-					{
-						client.Dispose();
-					}
+					client.Dispose();
 				}
 			}
+            /* Send information */
+            /* using (HttpClient client = new HttpClient())
+            {
+
+                try
+                {
+                    // Assamble the initial connection
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("User-Agent", "api-client");
+                    //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + endpoint.GetApiResponse().GetData().GetAccessToken());
+                    //client.DefaultRequestHeaders.Add("Cookie", "refreshToken=" + endpoint.GetApiResponse().GetData().GetRefreshToken());
+
+                    var httpContent = new StringContent(JsonSerializer.Serialize(devices), Encoding.UTF8, "application/json");
+
+                    var stringTask = client.PostAsync(endpoint.GetUploadURL(), httpContent);
+
+                    // Get response data
+                    var response = await stringTask;
+                    var stringContent = await response.Content.ReadAsStringAsync();
+
+                    ProgramLoggger.Debug(response.ToString());
+                    ProgramLoggger.Debug(stringContent);
+
+                    // Convert response content to usable information
+                    //api_response = JsonSerializer.Deserialize<ApiResponse>(stringContent);
+
+                }
+                catch (System.Net.Http.HttpRequestException ex)
+                {
+                    ProgramLoggger.Error(ex.Message);
+                }
+                finally
+                {
+                    client.Dispose();
+                }
+            } */
 		}
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace zkteco_cli.API
+﻿namespace zkteco_cli.API
 {
     internal class ApiResponse
     {

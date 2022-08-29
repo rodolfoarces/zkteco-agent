@@ -1,70 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using zkteco_cli.Connections;
-
-namespace zkteco_cli.API
+﻿namespace zkteco_cli.API
 {
     internal class ApiEndpoint
     {
-        string username { get; set; }
-        string password { get; set; } 
-        string application { get; set; }
-        string login_url { get; set; }
-        string upload_url { get; set; }
+        public long username { get; set; }
+        public string password { get; set; }
+        public string application { get; set; }
+        public string login_uri { get; set; }
+        public string upload_uri { get; set; }
 
-        ApiResponse apiresponse { get; set; }
-
-        public ApiEndpoint(ConnectionEndpoint endpoint)
+        public ApiEndpoint(string login_uri, string upload_uri,long username,string password,string application)
         {
-
-
+            this.username = username;
+            this.password = password;
+            this.application = application;
+            this.login_uri = login_uri;
+            this.upload_uri = upload_uri;
         }
-        public string GetUsername()
+
+        public ApiEndpoint()
+        {
+        }
+        public long GetUsername()
         {
             return username;
-        }
-        public void SetUsername(string usr)
-        {
-            this.username = usr;
         }
         public string GetPassword()
         {
             return password;
         }
-        public void SetPassword(string pass)
-        {
-            this.password = pass;
-        }
+
         public string GetLoginURL()
         {
-            return login_url;
+            return login_uri;
         }
-        public void SetLoginURL(string URL)
-        {
-            this.login_url = URL;
-        }
+ 
         public string GetUploadURL()
         {
-            return upload_url;
+            return upload_uri;
         }
-        public void SetUploadURL(string URL)
-        {
-            this.upload_url = URL;
-        }
+
         public string GetApplication()
         {
             return application;
         }
-        public ApiResponse GetApiResponse()
+
+        public override string ToString()
         {
-            return apiresponse;
-        }
-        public void SetApiResponse(ApiResponse response)
-        {
-            this.apiresponse = response;
+            string obj = "URL: " + this.login_uri + " ";
+            obj += "Upload URL: " + this.upload_uri + " ";
+            obj += "Username: " + this.username.ToString()+ " ";
+            obj += "Password: " + this.password + " ";
+            obj += "Application: " + this.application + " ";
+            return obj;
         }
     }
 }

@@ -8,10 +8,9 @@ namespace zkteco_cli.Connections
 {
     internal class ConnectionEndpoint
     {
-        public string url { get; set; }
+        public string ip { get; set; }
         public string username { get; set; }
         public string password { get; set; }
-        public string application { get; set; }
 
         public ConnectionEndpoint()
         {
@@ -20,17 +19,15 @@ namespace zkteco_cli.Connections
 
         public ConnectionEndpoint(string url, string username, string password, string application)
         {
-            this.url = url;
+            this.ip = url;
             this.username = username;
             this.password = password;
-            this.application = application;
         }
         public override string ToString()
         {
-            string obj = "URL: " + this.url.ToString() + " ";
+            string obj = "URL: " + this.ip.ToString() + " ";
             obj += "Username: " + this.username.ToString() + " ";
             obj += "Password: " + this.password.ToString() + " ";
-            obj += "Application: " + this.application.ToString();
             return obj;
         }
 
