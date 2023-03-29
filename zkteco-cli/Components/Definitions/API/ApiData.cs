@@ -4,8 +4,8 @@ namespace zkteco_cli.API
 {
     internal class ApiData
     {
-        string access_token { get; set; }
-        string refreshToken { get; set; }
+        public string access_token { get; set; }
+        public string refreshToken { get; set; }
 
         public ApiData()
         {
@@ -14,13 +14,18 @@ namespace zkteco_cli.API
 
         public string GetAccessToken()
         {
-            return access_token;
+            return this.access_token;
         }
         public string GetRefreshToken()
         {
-            return refreshToken;
+            return this.refreshToken;
+        }
+
+        public override string ToString()
+        {
+            string obj = "Access Token: " + this.access_token.ToString() + " ";
+            obj += "Refresh Token: " + this.refreshToken.ToString() + " ";
+            return obj;
         }
     }
-
-
 }

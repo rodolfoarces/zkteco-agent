@@ -4,7 +4,7 @@
     {
         bool success { get; set; }
 
-        ApiData data { get; set; }
+        public ApiData data { get; set; }
 
         string errors { get; set; }
         public ApiResponse()
@@ -17,7 +17,7 @@
             return success;
         }
 
-        public ApiData GetData ()
+        public ApiData GetData()
         {
             return data;
         }
@@ -26,9 +26,14 @@
         {
             return errors;
         }
-
+        public override string ToString()
+        {
+            string obj = "Data: " + this.data.ToString() +  " ";
+            obj += "Success: " + this.success.ToString() + " ";
+            return obj;
+        }
 
     }
+}
 
     
-}

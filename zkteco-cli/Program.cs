@@ -10,8 +10,7 @@ using zkteco_cli.ZKTeco;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Net;
-using System.Runtime.InteropServices;
+
 
 namespace zkteco_cli
 {
@@ -33,7 +32,7 @@ namespace zkteco_cli
 			CommandLine.Parser.Default.ParseArguments<Program>(args).WithParsed(RunOptions).WithNotParsed(HandleParseError);
 		}
 
-		static async void RunOptions(Program opts)
+		static void RunOptions(Program opts)
         {
 			if (string.IsNullOrEmpty(opts.JSONDevicesFile))
 			{
@@ -105,14 +104,14 @@ namespace zkteco_cli
 									ProgramLoggger.Debug("Deserializing JSON Endpoints file: " + ep_json);
 									try
 									{
-                                        ApiEndpoint endpoint = JsonSerializer.Deserialize<ApiEndpoint>(ep_json);
+                                        List<ApiEndpoint> endpoints = JsonSerializer.Deserialize<List<ApiEndpoint>>(ep_json);
+										
 										/* Show all information of endpoints */
-										//foreach (ApiEndpoint endpoint in endpoints)
-										//{
+										foreach (ApiEndpoint endpoint in endpoints)
+										{
 											ProgramLoggger.Debug(endpoint.ToString());
-										//}
-										await SendDataToEndpoints(endpoint, zkdevices);
-                                        
+                                            Task.Run(async () => await SendDataToEndpoints(endpoint, zkdevices)).Wait();
+                                        }
                                     }
 									catch (Exception ex)
 									{
@@ -182,9 +181,9 @@ namespace zkteco_cli
 					ProgramLoggger.Debug(response.ToString());
 					ProgramLoggger.Debug(stringContent);
 
-					// Convert response content to usable information
-					//Apiresponse api_response = JsonSerializer.Deserialize<ApiResponse>(stringContent);
-					//ProgramLoggger.Debug(api_response.ToString());
+					/* Convert response content to usable information */
+					ApiResponse api_response = JsonSerializer.Deserialize<ApiResponse>(stringContent);
+					ProgramLoggger.Debug(api_response.ToString());
 					/*
                     var url = endpoint.GetLoginURL();
 
