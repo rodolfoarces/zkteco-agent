@@ -7,11 +7,17 @@ namespace zkteco_cli.API
         public string access_token { get; set; }
         public string refreshToken { get; set; }
 
+        public ApiData(string access_tk,string refresh_tk)
+        {
+            this.access_token = access_tk;
+            this.refreshToken = refresh_tk;
+        }
         public ApiData()
         {
+            this.access_token = string.Empty;
+            this.refreshToken = string.Empty;
 
         }
-
         public string GetAccessToken()
         {
             return this.access_token;

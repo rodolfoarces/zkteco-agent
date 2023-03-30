@@ -9,6 +9,9 @@
         string errors { get; set; }
         public ApiResponse()
         {
+            this.success = false;
+            this.errors = string.Empty;
+            this.data = new ApiData(string.Empty,string.Empty);
 
         }
 
@@ -28,8 +31,8 @@
         }
         public override string ToString()
         {
-            string obj = "Data: " + this.data.ToString() +  " ";
-            obj += "Success: " + this.success.ToString() + " ";
+            string obj = "Success: " + this.success.ToString() + " "; 
+            obj += "Data: " + this.data.ToString() + " ";
             return obj;
         }
 
