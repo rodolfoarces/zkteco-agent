@@ -84,7 +84,7 @@ namespace zkteco_cli
 						}
 
                         // Print information to send
-                        ProgramLoggger.Info(JsonSerializer.Serialize(zkdevices));
+                        ProgramLoggger.Info("JSON content to send: " + JsonSerializer.Serialize(zkdevices));
                         // Endpoints to send information
                         if (string.IsNullOrEmpty(opts.JSONEndpointsFile))
 						{
@@ -154,7 +154,7 @@ namespace zkteco_cli
 
 			using (HttpClient client = new HttpClient())
 			{
-				ProgramLoggger.Debug("Trying connections");
+				ProgramLoggger.Info("Initiating connection");
 				/* Initiate connection and obtain token */
 				try
 				{
@@ -181,8 +181,7 @@ namespace zkteco_cli
 					var response = await stringTask;
 					var stringContent = await response.Content.ReadAsStringAsync();
 
-					ProgramLoggger.Debug(response.ToString());
-					ProgramLoggger.Debug(stringContent);
+					ProgramLoggger.Debug(" First connection response: " + stringContent.ToString());
 
 					/* Convert response content to usable information */
 					ApiResponse api_response = JsonSerializer.Deserialize<ApiResponse>(stringContent);
@@ -197,6 +196,7 @@ namespace zkteco_cli
 
                         try
                         {
+                            ProgramLoggger.Debug("Initiating second connection to send information");
                             // Assamble the initial connection
                             send_client.DefaultRequestHeaders.Accept.Clear();
                             send_client.DefaultRequestHeaders.Accept.Add(
@@ -208,13 +208,14 @@ namespace zkteco_cli
                             var send_httpContent = new StringContent(JsonSerializer.Serialize(devices), System.Text.Encoding.UTF8, "application/json");
 
                             var send_stringTask = send_client.PostAsync(endpoint.GetUploadURL(), send_httpContent);
-                            ProgramLoggger.Debug(send_client.DefaultRequestHeaders.ToString());
-                            ProgramLoggger.Debug(send_httpContent.ToString());
+                            ProgramLoggger.Debug("Request headers for second connection: " + send_client.DefaultRequestHeaders.ToString());
+                            ProgramLoggger.Debug("Content to send: " + send_httpContent.ToString());
                             
                             // Get response data
                             var send_response = await send_stringTask;
                             var send_stringContent = await send_response.Content.ReadAsStringAsync();
-
+                            
+							ProgramLoggger.Info("Information sent");
                             ProgramLoggger.Debug(send_response.ToString());
                             ProgramLoggger.Debug(send_stringContent.ToString());
 
