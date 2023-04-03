@@ -1,8 +1,8 @@
 [
   {
-    "login_url": "https://endpoint:443/api/login",
-	"upload_url": "https://endpoint:443/api/v2/marcacionesRelojes",
-    "username": "Hello",
+    "login_uri": "https://endpoint:443/api/login",
+    "upload_uri": "https://endpoint:443/api/v2/marcacionesRelojes",
+    "username": 1234567,
     "password": "Secret",
     "application": "yup"
   }
