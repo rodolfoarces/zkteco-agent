@@ -5,59 +5,59 @@ namespace zkteco_cli.ZKTeco
 {
 	public class ZKTecoUser
 	{
-		public string Id { get; set; }
-		public string Name { get; set; }
+		public string id { get; set; }
+		public string name { get; set; }
 
-		private string Password { get; set; }
+		private string password { get; set; }
 
-		public int Privilege { get; set; }
+		public int privilege { get; set; }
 
-		public bool Enabled { get; set; }
+		public bool enabled { get; set; }
 
-		public string Serial { get; set; }
+		public string serial { get; set; }
 		public ZKTecoUser()
 		{
-			this.Id = String.Empty;
-			this.Name = String.Empty;
-			this.Password = String.Empty;
-			this.Serial = String.Empty;
-			this.Privilege = 0;
-			this.Enabled = false;
+			this.id = String.Empty;
+			this.name = String.Empty;
+			this.password = String.Empty;
+			this.serial = String.Empty;
+			this.privilege = 0;
+			this.enabled = false;
 
 		}
 
 		public ZKTecoUser(string serial, string id, string name, string password, int privilege, bool enabled)
 		{
-			this.Serial = serial;
-			this.Id = id;
-			this.Name = name;
-			this.Password = password;
-			this.Privilege = privilege;
-			this.Enabled = enabled;
+			this.serial = serial;
+			this.id = id;
+			this.name = name;
+			this.password = password;
+			this.privilege = privilege;
+			this.enabled = enabled;
 
 		}
 
 
-		public string GetPassword()
+        public string GetPassword()
 		{
-			if (String.IsNullOrEmpty(this.Password))
+			if (String.IsNullOrEmpty(this.password))
 			{
 				return null;
 			}
 			else
 			{
-				return this.Password;
+				return this.password;
 			}
 
 		}
 
 		public override string ToString()
 		{
-			string obj = "Id: " + this.Id.ToString() + " ";
-			obj += "Name: " + this.Name.ToString() + " ";
-			obj += "Privileges: " + this.Privilege.ToString() + " ";
-			obj += "Enabled: " + this.Enabled.ToString() + " ";
-			obj += "Serial: " + this.Serial.ToString() + " ";
+			string obj = "Id: " + this.id.ToString() + " ";
+			obj += "Name: " + this.name.ToString() + " ";
+			obj += "Privileges: " + this.privilege.ToString() + " ";
+			obj += "Enabled: " + this.enabled.ToString() + " ";
+			obj += "Serial: " + this.serial.ToString() + " ";
 			return obj;
 		}
 
@@ -71,18 +71,18 @@ namespace zkteco_cli.ZKTeco
 			else
 			{
 				ZKTecoUser z = (ZKTecoUser)zktecouser;
-				return (Id == z.Id) && (Serial == z.Serial);
+				return (id == z.id) && (serial == z.serial);
 			}
 		}
 
 		public override int GetHashCode()
 		{
 			int hashCode = 1771101144;
-			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Id);
-			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Password);
-			hashCode = hashCode * -1521134295 + Privilege.GetHashCode();
-			hashCode = hashCode * -1521134295 + Enabled.GetHashCode();
+			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(id);
+			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(name);
+			hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(password);
+			hashCode = hashCode * -1521134295 + privilege.GetHashCode();
+			hashCode = hashCode * -1521134295 + enabled.GetHashCode();
 			return hashCode;
 		}
 	}

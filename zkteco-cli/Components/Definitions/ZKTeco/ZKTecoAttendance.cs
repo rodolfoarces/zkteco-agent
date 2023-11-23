@@ -9,9 +9,9 @@ namespace zkteco_cli.ZKTeco
 {
 	internal class ZKTecoAttendance
     {
-		public string Serial { get; set; }
+		public string serial { get; set; }
 
-		public string UserId { get; set; }
+		public string user_id { get; set; }
 
 		/*	The VerifyMode parameter specifies the verification mode. The values are described 
 		 *	as follows: under normal conditions: 
@@ -19,7 +19,7 @@ namespace zkteco_cli.ZKTeco
 		 *	1 fingerprint verification, and 
 		 *	2 card verification 
 		 */
-		public int VerifyMode { get; set; }
+		public int verify_mode { get; set; }
 		
 		/* The InOutMode parameter specifies the attendance status. The values are described
 		 * as follows:
@@ -30,53 +30,70 @@ namespace zkteco_cli.ZKTeco
 		 * 4-OT-In
 		 * 5-OT-Out
 		*/
-		public int InOutMode { get; set;}
+		public int in_out_mode { get; set;}
 
 		/* Variables of the date/time in which the user check in the device
 		 */
-		public int Year { get; set; }
-		public int Month { get; set; }
-		public int Day { get; set; }
-		public int Hour { get; set; }
-		public int Minute { get; set; }
-		public int Second { get; set; }
+
+		public int year { get; set; }
+		public int month { get; set; }
+		public int day { get; set; }
+		public int hour { get; set; }
+		public int minute { get; set; }
+		public int second { get; set; }
 
 		/* If used is the work code for the attendance, a user may have multiple work codes
 		 * for differente purposes
 		 */
-		public int WorkCode { get; set; }
+		public int work_code { get; set; }
 
 		public ZKTecoAttendance(string serial, string enrollnumber, int verifymode, int inoutmode, int year, int month, int day, int hour, int minute, int second, int workcode)
 		{
-			this.Serial = serial;
-			this.UserId = enrollnumber;
-			this.VerifyMode = verifymode;
-			this.InOutMode = inoutmode;
-			this.Year = year;
-			this.Month = month;
-			this.Day = day;
-			this.Hour = hour;
-			this.Minute = minute;
-			this.Second = second;
-			this.WorkCode = workcode;
+			this.serial = serial;
+			this.user_id = enrollnumber;
+			this.verify_mode = verifymode;
+			this.in_out_mode = inoutmode;
+			this.year = year;
+			this.month = month;
+			this.day = day;
+			this.hour = hour;
+			this.minute = minute;
+			this.second = second;
+			this.work_code = workcode;
 
 		}
+
+        public ZKTecoAttendance()
+        {
+            this.serial = String.Empty;
+            this.user_id = String.Empty;
+            this.verify_mode = 0;
+            this.in_out_mode = 0;
+            this.year = 0;
+            this.month = 0;
+            this.day = 0;
+            this.hour = 0;
+            this.minute = 0;
+            this.second = 0;
+            this.work_code = 0;
+
+        }
 
         public override string ToString()
         {
 			string obj;
 
-			obj = "Serial: " + Serial.ToString() + " ";
-			obj += "User ID: " + UserId.ToString() + " ";
-			obj += "VerifyMode: " + VerifyMode.ToString() + " ";
-			obj += "InOutMode: " + InOutMode.ToString() + " ";
-			obj += "Year: " + Year.ToString() + " ";
-			obj += "Month: " + Month.ToString() + " ";
-			obj	+= "Day: " + Day.ToString() + " ";
-			obj += "Hour: " + Hour.ToString() + " ";
-			obj += "Minute: " + Minute.ToString() + " ";
-			obj += "Second: " + Second.ToString() + " ";
-			obj += "WorkCode: " + WorkCode.ToString();
+			obj = "Serial: " + this.serial.ToString() + " ";
+			obj += "User ID: " + this.user_id.ToString() + " ";
+			obj += "VerifyMode: " + this.verify_mode.ToString() + " ";
+			obj += "InOutMode: " + this.in_out_mode.ToString() + " ";
+			obj += "Year: " + this.year.ToString() + " ";
+			obj += "Month: " + this.month.ToString() + " ";
+			obj	+= "Day: " + this.day.ToString() + " ";
+			obj += "Hour: " + this.hour.ToString() + " ";
+			obj += "Minute: " + this.minute.ToString() + " ";
+			obj += "Second: " + this.second.ToString() + " ";
+			obj += "WorkCode: " + this.work_code.ToString();
 
 			return obj;
         }

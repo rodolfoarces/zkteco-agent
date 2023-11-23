@@ -14,19 +14,25 @@ namespace zkteco_cli.ZKTeco
 	{
 		private static readonly ILog ZKTecoDeviceLoggger = LogManager.GetLogger(typeof(ZKTecoDevice));
 
-		private int id = 0;
-		public string ip = null;
-		public int port = 0;
-		private int password = 0;
-		public string type = "zkteco";
+        /* 
+		*/
+        public int id { get; set; }
+        public string ip { get; set; }
+        public int port { get; set; }
+        public int password { get; set; }
+        public string type { get; set; }
 
-		// Loading ZKTeco Class device
-		private CZKEM zkteco = new CZKEM();
+		public List<ZKTecoAttendance> attendances { get; set; }
+
+		public List<ZKTecoUser> users { get; set; }
+
+
+        // Loading ZKTeco Class device
+        private CZKEM zkteco = new CZKEM();
 
 		public string Serial = null;
 
-		public List<ZKTecoAttendance> attendances = new List<ZKTecoAttendance>();
-		public List<ZKTecoUser> users = new List<ZKTecoUser>();
+		
 
 		public ZKTecoDevice(ConnectionDevice dev)
 		{
@@ -34,6 +40,9 @@ namespace zkteco_cli.ZKTeco
 			this.SetIp(dev.GetIp());
 			this.SetPort(dev.GetPort());
 			this.SetPassword(dev.GetPassword());
+
+            this.attendances = new List<ZKTecoAttendance>();
+			this.users = new List<ZKTecoUser>();
 		}
 
 		public ZKTecoDevice(int id, string ip, int port, int password)
@@ -42,9 +51,24 @@ namespace zkteco_cli.ZKTeco
 			this.ip = ip;
 			this.port = port;
 			this.password = password;
-		}
 
-		public void SetId(int id)
+            this.attendances = new List<ZKTecoAttendance>();
+            this.users = new List<ZKTecoUser>();
+        }
+
+        public ZKTecoDevice()
+        {
+            this.id = 0;
+			this.ip = String.Empty;
+			this.port = 0;
+			this.password = 0;
+			this.type = "zkteco";
+
+            this.attendances = new List<ZKTecoAttendance>();
+            this.users = new List<ZKTecoUser>();
+        }
+
+        public void SetId(int id)
 		{
 			this.id = id;
 		}
@@ -163,7 +187,7 @@ namespace zkteco_cli.ZKTeco
 
 			if (hasPassword)
 			{
-				ZKTecoDeviceLoggger.Debug("Opennig connection to " + this.GetIp() + ":" + this.GetPort().ToString());
+				ZKTecoDeviceLoggger.Info("Opennig connection to " + this.GetIp() + ":" + this.GetPort().ToString());
 				bool IsConnected = this.zkteco.Connect_Net(this.GetIp(), this.GetPort());
 
 				if (IsConnected)
@@ -199,8 +223,9 @@ namespace zkteco_cli.ZKTeco
 							ZKTecoDeviceLoggger.Debug("Creating attendance");
 							ZKTecoAttendance attendance = new ZKTecoAttendance(this.GetSerial(), dwEnrollNumber.ToString(), dwVerifyMode, dwInOutMode, dwYear, dwMonth, dwDay, dwHour, dwMinute, dwSecond, dwWorkCode);
 							ZKTecoDeviceLoggger.Debug("Adding attendance to List");
-							attendances.Add(attendance);
-							ZKTecoDeviceLoggger.Debug(attendance.ToString());
+							this.attendances.Add(attendance);
+                            ZKTecoDeviceLoggger.Debug("Attendance count: " + this.attendances.Count.ToString());
+                            ZKTecoDeviceLoggger.Debug(attendance.ToString());
 						}
 					}
 					else
@@ -270,8 +295,10 @@ namespace zkteco_cli.ZKTeco
 							ZKTecoDeviceLoggger.Debug("Creating user");
 							ZKTecoUser user = new ZKTecoUser(this.GetSerial(), dwEnrollNumber.ToString(), name.ToString(), password.ToString(), privileges, enabled);
 							ZKTecoDeviceLoggger.Debug("Adding user to List");
-							users.Add(user);
-							ZKTecoDeviceLoggger.Debug(user.ToString());
+							this.users.Add(user);
+							ZKTecoDeviceLoggger.Debug("User count: " + this.users.Count.ToString());
+
+                            ZKTecoDeviceLoggger.Debug(user.ToString());
 						}
 					}
 					else

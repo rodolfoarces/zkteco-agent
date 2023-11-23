@@ -2,13 +2,13 @@
 {
     internal class ApiEndpoint
     {
-        public long username { get; set; }
+        public string username { get; set; }
         public string password { get; set; }
         public string application { get; set; }
         public string login_uri { get; set; }
         public string upload_uri { get; set; }
 
-        public ApiEndpoint(string login_uri, string upload_uri,long username,string password,string application)
+        public ApiEndpoint(string login_uri, string upload_uri,string username,string password,string application)
         {
             this.username = username;
             this.password = password;
@@ -20,7 +20,7 @@
         public ApiEndpoint()
         {
         }
-        public long GetUsername()
+        public string GetUsername()
         {
             return username;
         }
@@ -48,7 +48,7 @@
         {
             string obj = "URL: " + this.login_uri + " ";
             obj += "Upload URL: " + this.upload_uri + " ";
-            obj += "Username: " + this.username.ToString()+ " ";
+            obj += "Username: " + this.username + " ";
             obj += "Password: " + this.password + " ";
             obj += "Application: " + this.application + " ";
             return obj;
